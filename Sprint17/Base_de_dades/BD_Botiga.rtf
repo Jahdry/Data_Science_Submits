@@ -1,0 +1,31 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Bold;\f1\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww15960\viewh19880\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\sl360\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs24 \cf0 \ul \ulc0 Entitats: 
+\f1\b0 \ulnone \
+PERSONA(\ul DNI\ulnone , Nom, Congoms, Adre\'e7a, Email, Telefons)\
+TREBALLADOR, SC de PERSONA, (\ul CodiTreb\ulnone )\
+CLIENT, SC de PERSONA,(\ul CodiClient\ulnone )\
+ESTABLIMENT(\ul CodiEstab\ulnone , Nom, Adre\'e7a)\
+PRODUCTE(\ul CodiProd\ulnone , NomProd, Preu)\
+TIPUS_PRODUCTE(\ul CodiTipus\ulnone , NomTipus, Caduca)\
+TRANSACCI\'d3(\ul CodiTrans\ulnone , \ul TipusTrans\ulnone , Data, SubTrans, Pagament)\
+\
+\
+
+\f0\b \ul Interrelaci\'f3ns:
+\f1\b0 \ulnone \
+Coordina, entre TREBALLADOR(total) i TREBALLADOR(total): 1-N\
+Treballa(Torn, Salari), entre TREBALLADOR(total) i ESTABLIMENT(parcial): N-1\
+Despatxa, entre TREBALLADOR(parcial) i TRANSACCI\'d3(total): 1-N\
+Realitza, entre CLIENT(total) i TRANSACCIO(total): 1-N\
+Realitza2, entre ESTABLIMENT(parcial) i TRANSACCI\'d3(total): 1-N\
+Divideixen(Secci\'f3), entre ETABLIMENT(parcial) i TIPUS_PRODUCTE(parcial): M-N\
+Tenen (Stock), entre ESTABLIMENT(parcial) i PRODUCTE(parcial): M-N\
+Classifiquen, entre TIPUS_PRODUCTE(parcial) i PRODUCTE(total): 1-N\
+Contenen(Quantitat, Descompte, SubLinea), entre TRANSACCI\'d3(total) i PRODUCTE(parcial) :M-N \
+}
