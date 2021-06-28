@@ -13,7 +13,9 @@ CLIENT, SC de PERSONA,(\ul CodiClient\ulnone )\
 ESTABLIMENT(\ul CodiEstab\ulnone , Nom, Adre\'e7a)\
 PRODUCTE(\ul CodiProd\ulnone , NomProd, Preu)\
 TIPUS_PRODUCTE(\ul CodiTipus\ulnone , NomTipus, Caduca)\
-TRANSACCI\'d3(\ul CodiTrans\ulnone , \ul TipusTrans\ulnone , Data, SubTrans, Pagament)\
+TRANSACCI\'d3 \'93Entitat Feble\'94(\ul CodiTrans\ulnone , \ul TipusTrans\ulnone , Data, SubTrans, Pagament)\
+TIPUS_TRANS(\ul CodiTipusTrans\ulnone , TipusTransNom)\
+TIPUS_PAGAMENT(\ul CodiTipusPagament\ulnone , TipusPagamentNom)\
 \
 \
 
@@ -28,4 +30,6 @@ Divideixen(Secci\'f3), entre ETABLIMENT(parcial) i TIPUS_PRODUCTE(parcial): M-N\
 Tenen (Stock), entre ESTABLIMENT(parcial) i PRODUCTE(parcial): M-N\
 Classifiquen, entre TIPUS_PRODUCTE(parcial) i PRODUCTE(total): 1-N\
 Contenen(Quantitat, Descompte, SubLinea), entre TRANSACCI\'d3(total) i PRODUCTE(parcial) :M-N \
+Es, entre TIPUS_TRANS(parcial) i TRANSACCI\'d3(Total): 1-N\
+Paga, entre TIPUS_PAGAMENT(Parcial) i TRANSACCI\'d3(Total): 1-N\
 }
