@@ -92,21 +92,43 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `BD_Botiga`.`TRANS_TIPUS`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `BD_Botiga`.`TRANS_TIPUS` (
+  `TransTipusID` INT NOT NULL AUTO_INCREMENT,
+  `TransTipusNom` VARCHAR(45) NULL,
+  PRIMARY KEY (`TransTipusID`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `BD_Botiga`.`PAGAMENT`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `BD_Botiga`.`PAGAMENT` (
+  `PagamentID` INT NOT NULL AUTO_INCREMENT,
+  `PagamentNom` VARCHAR(45) NULL,
+  PRIMARY KEY (`PagamentID`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `BD_Botiga`.`TRANSACCIO`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `BD_Botiga`.`TRANSACCIO` (
   `TransID` INT NOT NULL,
-  `TransTipus` VARCHAR(45) NOT NULL,
+  `TRANS_TIPUS_TransTipusID` INT NOT NULL,
   `Data` DATETIME NULL,
-  `Pagament` VARCHAR(10) NULL,
-  `TransSubtotal` DECIMAL(2) NULL,
+  `TransSubtotal` DECIMAL(4,2) NULL,
   `CLIENT_CodiClient` INT NOT NULL,
   `ESTABLIMENT_CodiEstab` INT NOT NULL,
   `TREBALLADOR_CodiTreb` INT NOT NULL,
-  PRIMARY KEY (`TransID`, `TransTipus`),
+  `PAGAMENT_PagamentID` INT NOT NULL,
+  PRIMARY KEY (`TransID`, `TRANS_TIPUS_TransTipusID`),
   INDEX `fk_TRANSACCIO_CLIENT1_idx` (`CLIENT_CodiClient` ASC) VISIBLE,
   INDEX `fk_TRANSACCIO_ESTABLIMENT1_idx` (`ESTABLIMENT_CodiEstab` ASC) VISIBLE,
   INDEX `fk_TRANSACCIO_TREBALLADOR1_idx` (`TREBALLADOR_CodiTreb` ASC) VISIBLE,
+  INDEX `fk_TRANSACCIO_TRANS_TIPUS1_idx` (`TRANS_TIPUS_TransTipusID` ASC) VISIBLE,
+  INDEX `fk_TRANSACCIO_PAGAMENT1_idx` (`PAGAMENT_PagamentID` ASC) VISIBLE,
   CONSTRAINT `fk_TRANSACCIO_CLIENT1`
     FOREIGN KEY (`CLIENT_CodiClient`)
     REFERENCES `BD_Botiga`.`CLIENT` (`CodiClient`)
@@ -120,6 +142,16 @@ CREATE TABLE IF NOT EXISTS `BD_Botiga`.`TRANSACCIO` (
   CONSTRAINT `fk_TRANSACCIO_TREBALLADOR1`
     FOREIGN KEY (`TREBALLADOR_CodiTreb`)
     REFERENCES `BD_Botiga`.`TREBALLADOR` (`CodiTreb`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_TRANSACCIO_TRANS_TIPUS1`
+    FOREIGN KEY (`TRANS_TIPUS_TransTipusID`)
+    REFERENCES `BD_Botiga`.`TRANS_TIPUS` (`TransTipusID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_TRANSACCIO_PAGAMENT1`
+    FOREIGN KEY (`PAGAMENT_PagamentID`)
+    REFERENCES `BD_Botiga`.`PAGAMENT` (`PagamentID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -194,22 +226,22 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `BD_Botiga`.`LINEAS TRANSACCIO` (
   `TRANSACCIO_TransID` INT NOT NULL,
-  `TRANSACCIO_TransTipus` VARCHAR(45) NOT NULL,
+  `TRANSACCIO_TRANS_TIPUS_TransTipusID` INT NOT NULL,
   `PRODUCTE_ProductID` INT NOT NULL,
   `Quantitat` INT NULL,
   `Descompte` INT NULL,
-  `LienaSubtotal` INT NULL,
-  PRIMARY KEY (`TRANSACCIO_TransID`, `TRANSACCIO_TransTipus`, `PRODUCTE_ProductID`),
-  INDEX `fk_PRODUCTE_has_TRANSACCIO_TRANSACCIO1_idx` (`TRANSACCIO_TransID` ASC, `TRANSACCIO_TransTipus` ASC) VISIBLE,
+  `LienaSubtotal` DECIMAL(2) GENERATED ALWAYS AS (`quantitat` * 2) VIRTUAL,
+  PRIMARY KEY (`TRANSACCIO_TransID`, `TRANSACCIO_TRANS_TIPUS_TransTipusID`, `PRODUCTE_ProductID`),
   INDEX `fk_PRODUCTE_has_TRANSACCIO_PRODUCTE1_idx` (`PRODUCTE_ProductID` ASC) VISIBLE,
+  INDEX `fk_LINEAS TRANSACCIO_TRANSACCIO1_idx` (`TRANSACCIO_TransID` ASC, `TRANSACCIO_TRANS_TIPUS_TransTipusID` ASC) VISIBLE,
   CONSTRAINT `fk_PRODUCTE_has_TRANSACCIO_PRODUCTE1`
     FOREIGN KEY (`PRODUCTE_ProductID`)
     REFERENCES `BD_Botiga`.`PRODUCTE` (`ProductID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_PRODUCTE_has_TRANSACCIO_TRANSACCIO1`
-    FOREIGN KEY (`TRANSACCIO_TransID` , `TRANSACCIO_TransTipus`)
-    REFERENCES `BD_Botiga`.`TRANSACCIO` (`TransID` , `TransTipus`)
+  CONSTRAINT `fk_LINEAS TRANSACCIO_TRANSACCIO1`
+    FOREIGN KEY (`TRANSACCIO_TransID` , `TRANSACCIO_TRANS_TIPUS_TransTipusID`)
+    REFERENCES `BD_Botiga`.`TRANSACCIO` (`TransID` , `TRANS_TIPUS_TransTipusID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
