@@ -1,0 +1,55 @@
+Enric Homs - Data Science — Today at 12:25 PM
+# defineixo el sample size que vull
+N = 2000
+
+# genero una nou dataset amb el random sample estratificat
+retards2_df = retards_df .groupby('ArrDelay', group_keys=False).apply(lambda x: x.sample(int(np.rint(N*len(x)/len(retards_df))))).sample(frac=1).reset_index(drop=True)
+
+# generem la matriu de confusió
+confusion = metrics.confusion_matrix(y_test, y_pred_dtc)
+print(confusion)
+
+TP = confusion[1, 1]
+TN = confusion[0, 0]
+FP = confusion[0, 1]
+FN = confusion[1, 0]
+
+# Crear la matriu deconfusió
+
+sns.heatmap(confusion, annot=True, cmap = 'coolwarm')
+
+# Formato para que no salga notación cientifica
+
+class_names=[0,1] 
+fig, ax = plt.subplots()
+tick_marks = np.arange(len(class_names))
+plt.xticks(tick_marks, class_names)
+plt.yticks(tick_marks, class_names)
+
+sns.heatmap(pd.DataFrame(cnf_matrix), annot=True, cmap="YlGnBu" ,fmt='g')
+ax.xaxis.set_label_position("top")
+plt.tight_layout()
+plt.title('Confusion matrix', y=1.1)
+plt.ylabel('Actual label')
+plt.xlabel('Predicted label')
+
+#logistic regression amb gri search: 
+
+
+lgrclassif = LogisticRegression()
+
+param_grid = [
+    {'penalty': ['l1', 'l2','elasticnet', 'none'],
+    'C' : [0.6, 0.1, 0.01],
+    'solver': ['lbfgs', 'newton-cg', 'liblinear', 'sag', 'saga'],
+    'max_iter': [100, 1000, 1500]
+    }
+]
+
+# fit the model with data
+lgrclassif.fit(X_train,y_train)
+
+#
+y_pred_lgr = lgrclassif.predict(X_test)
+clf = GridSearchCV(lgrclassif, param_grid = param_grid, cv = 3, verbose = False)
+best_clf = clf.fit(X_test, y_pred_lgr)
